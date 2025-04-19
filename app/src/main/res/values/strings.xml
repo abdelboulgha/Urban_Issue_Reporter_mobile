@@ -11,4 +11,22 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="regions_maroc">
+        <item>Tanger-Tétouan-Al Hoceïma</item>
+        <item>Oriental</item>
+        <item>Fès-Meknès</item>
+        <item>Rabat-Salé-Kénitra</item>
+        <item>Béni Mellal-Khénifra</item>
+        <item>Casablanca-Settat</item>
+        <item>Marrakech-Safi</item>
+        <item>Drâa-Tafilalet</item>
+        <item>Souss-Massa</item>
+        <item>Guelmim-Oued Noun</item>
+        <item>Laâyoune-Sakia El Hamra</item>
+        <item>Dakhla-Oued Ed-Dahab</item>
+    </string-array>
+
+
 </resources>

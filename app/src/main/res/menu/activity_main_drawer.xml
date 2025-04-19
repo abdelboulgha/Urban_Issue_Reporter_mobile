@@ -16,5 +16,14 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/menu_slideshow" />
+        <item
+            android:id="@+id/fragment1"
+            android:icon="@drawable/baseline_announcement_24"
+            android:title="FAQ" />
+
+        <item
+            android:id="@+id/fragment2"
+            android:icon="@drawable/baseline_add_box_24"
+            android:title="Ajouter réclamation" />
     </group>
 </menu>

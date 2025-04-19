@@ -22,4 +22,15 @@
         android:name="com.example.urban_issue_reporter_mobile.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/fragment1"
+        android:name="com.example.urban_issue_reporter_mobile.ui.faq.faq"
+        android:label="faq"
+        tools:layout="@layout/fragment_faq" />
+
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="com.example.urban_issue_reporter_mobile.ui.addRec.AjouterRec"
+        android:label="ajouter réclamation"
+        tools:layout="@layout/fragment_ajouter_rec" />
 </navigation>
