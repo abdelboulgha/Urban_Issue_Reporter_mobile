@@ -52,4 +52,22 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // ViewModel and LiveData
+    implementation ("androidx.lifecycle:lifecycle-viewmodel:2.6.1")
+    implementation ("androidx.lifecycle:lifecycle-livedata:2.6.1")
+
+    // Retrofit pour les appels API
+
+    // Gson pour la sérialisation/désérialisation JSON
+    implementation ("com.google.code.gson:gson:2.10.1")
+
+    // OkHttp pour les logs et intercepteurs (optionnel)
+    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    // Tests
+    /*testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'*/
 }
