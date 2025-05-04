@@ -33,4 +33,10 @@
         android:name="com.example.urban_issue_reporter_mobile.ui.addRec.AjouterRec"
         android:label="ajouter réclamation"
         tools:layout="@layout/fragment_ajouter_rec" />
+
+    <fragment
+        android:id="@+id/nav_reclamations"
+        android:name="com.example.urban_issue_reporter_mobile.ui.reclamation.ReclamationFragment"
+        android:label="Réclamations"
+        tools:layout="@layout/fragment_reclamation" />
 </navigation>
