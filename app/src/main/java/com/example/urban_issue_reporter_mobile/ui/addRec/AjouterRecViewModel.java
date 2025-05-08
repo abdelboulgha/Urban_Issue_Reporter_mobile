@@ -5,19 +5,24 @@ import android.net.Uri;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.urban_issue_reporter_mobile.api.ReclamationRequest;
 import com.example.urban_issue_reporter_mobile.api.ReclamationResponse;
 import com.example.urban_issue_reporter_mobile.api.RetrofitClient;
-import com.example.urban_issue_reporter_mobile.ui.beans.Reclamation;
+import com.example.urban_issue_reporter_mobile.model.Categorie;
+import com.example.urban_issue_reporter_mobile.model.Reclamation;
+import com.example.urban_issue_reporter_mobile.model.Region;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -33,10 +38,90 @@ public class AjouterRecViewModel extends ViewModel {
         void onError(String message);
     }
 
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    public interface DataCallback<T> {
+        void onSuccess(List<T> data);
+        void onError(String message);
+    }
 
-    public MutableLiveData<Boolean> getIsLoading() {
+    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private MutableLiveData<List<Categorie>> categories = new MutableLiveData<>();
+    private MutableLiveData<List<Region>> regions = new MutableLiveData<>();
+    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
+
+    public AjouterRecViewModel() {
+        // Charger les données au moment de la création du ViewModel
+        loadCategories();
+        loadRegions();
+    }
+
+    public LiveData<Boolean> getIsLoading() {
         return isLoading;
+    }
+
+    public LiveData<List<Categorie>> getCategories() {
+        return categories;
+    }
+
+    public LiveData<List<Region>> getRegions() {
+        return regions;
+    }
+
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
+    }
+
+    // Méthode pour charger les catégories depuis l'API
+    public void loadCategories() {
+        isLoading.setValue(true);
+
+        RetrofitClient.getInstance().getApiService().getAllCategories()
+                .enqueue(new Callback<List<Categorie>>() {
+                    @Override
+                    public void onResponse(Call<List<Categorie>> call, Response<List<Categorie>> response) {
+                        isLoading.setValue(false);
+                        if (response.isSuccessful() && response.body() != null) {
+                            categories.setValue(response.body());
+                        } else {
+                            errorMessage.setValue("Erreur lors du chargement des catégories: " + response.code());
+                            categories.setValue(new ArrayList<>()); // Liste vide en cas d'erreur
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Categorie>> call, Throwable t) {
+                        isLoading.setValue(false);
+                        errorMessage.setValue("Erreur réseau: " + t.getMessage());
+                        categories.setValue(new ArrayList<>()); // Liste vide en cas d'erreur
+                        Log.e("AjouterRecVM", "Erreur de chargement des catégories", t);
+                    }
+                });
+    }
+
+    // Méthode pour charger les régions depuis l'API
+    public void loadRegions() {
+        isLoading.setValue(true);
+
+        RetrofitClient.getInstance().getApiService().getAllRegions()
+                .enqueue(new Callback<List<Region>>() {
+                    @Override
+                    public void onResponse(Call<List<Region>> call, Response<List<Region>> response) {
+                        isLoading.setValue(false);
+                        if (response.isSuccessful() && response.body() != null) {
+                            regions.setValue(response.body());
+                        } else {
+                            errorMessage.setValue("Erreur lors du chargement des régions: " + response.code());
+                            regions.setValue(new ArrayList<>()); // Liste vide en cas d'erreur
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Region>> call, Throwable t) {
+                        isLoading.setValue(false);
+                        errorMessage.setValue("Erreur réseau: " + t.getMessage());
+                        regions.setValue(new ArrayList<>()); // Liste vide en cas d'erreur
+                        Log.e("AjouterRecVM", "Erreur de chargement des régions", t);
+                    }
+                });
     }
 
     // Méthode pour soumettre une réclamation sans image
