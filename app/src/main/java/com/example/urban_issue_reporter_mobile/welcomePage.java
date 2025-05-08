@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.urban_issue_reporter_mobile.adapter.OnboardingAdapter;
@@ -33,6 +34,10 @@ public class welcomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_page);
+
+        // Configurer la barre d'état transparente
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, android.R.color.transparent));
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -80,7 +85,7 @@ public class welcomePage extends AppCompatActivity {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 } else {
                     // Si c'est la dernière page, aller à la page d'authentification
-                    Intent intent = new Intent(welcomePage.this, MainActivity.class);
+                    Intent intent = new Intent(welcomePage.this, SigninActivity.class);
                     startActivity(intent);
                     finish(); // Fermer l'activité de bienvenue
                 }
@@ -91,11 +96,10 @@ public class welcomePage extends AppCompatActivity {
     private void setupOnboardingItems() {
         onboardingItems = new ArrayList<>();
 
-        // Ajouter les éléments d'onboarding
+        // Ajouter les éléments d'onboarding avec des icônes plus modernes
         OnboardingItem item1 = new OnboardingItem();
-        item1.setTitle("Signalez les problèmes");
-        item1.setDescription("Photographiez et signalez facilement les problèmes d'infrastructure dans votre quartier");
-        item1.setImageResId(android.R.drawable.ic_menu_camera);
+        item1.setTitle("Signalez facilement");
+        item1.setImageResId(R.drawable.ic_list_check); // Remplacer par une icône personnalisée
 
         OnboardingItem item2 = new OnboardingItem();
         item2.setTitle("Localisez avec précision");
@@ -105,7 +109,7 @@ public class welcomePage extends AppCompatActivity {
         OnboardingItem item3 = new OnboardingItem();
         item3.setTitle("Suivez les mises à jour");
         item3.setDescription("Recevez des notifications sur l'avancement des réparations");
-        item3.setImageResId(android.R.drawable.ic_popup_reminder);
+        item3.setImageResId(R.drawable.ic_clock); // Remplacer par une icône personnalisée
 
         onboardingItems.add(item1);
         onboardingItems.add(item2);
@@ -134,6 +138,7 @@ public class welcomePage extends AppCompatActivity {
                 imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.indicator_active));
             } else {
                 imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.indicator_inactive));
+                viewPager.setPageTransformer(new MarginPageTransformer(40));
             }
         }
     }
