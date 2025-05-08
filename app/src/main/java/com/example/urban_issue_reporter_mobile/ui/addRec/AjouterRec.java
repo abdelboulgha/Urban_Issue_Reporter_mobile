@@ -2,6 +2,7 @@ package com.example.urban_issue_reporter_mobile.ui.addRec;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.urban_issue_reporter_mobile.R;
@@ -43,6 +45,7 @@ public class AjouterRec extends Fragment {
     private static final int REQUEST_LOCATION_PERMISSION = 2;
     private FusedLocationProviderClient fusedLocationClient;
     private Uri selectedImageUri;
+    private ProgressDialog progressDialog;
 
     public AjouterRec() {
         // Required empty public constructor
@@ -57,6 +60,18 @@ public class AjouterRec extends Fragment {
         super.onCreate(savedInstanceState);
         ajouterRecViewModel = new ViewModelProvider(this).get(AjouterRecViewModel.class);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+        // Observer pour afficher/masquer le dialogue de chargement
+        ajouterRecViewModel.getIsLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoading) {
+                if (isLoading) {
+                    showProgressDialog();
+                } else {
+                    hideProgressDialog();
+                }
+            }
+        });
     }
 
     @Override
@@ -97,7 +112,6 @@ public class AjouterRec extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.regionSpinner.setAdapter(adapter);
     }
-
 
     private void setupButtons() {
         binding.locationButton.setOnClickListener(v -> getLocation());
@@ -196,49 +210,72 @@ public class AjouterRec extends Fragment {
         reclamation.setDescription(binding.descriptionInput.getText().toString());
         reclamation.setLocalisation(binding.localisationInput.getText().toString());
 
-        // Ici, vous récupéreriez les IDs réels pour categorie et région
-        String categorieSelected = (String) binding.categorieSpinner.getSelectedItem();
-        String regionSelected = (String) binding.regionSpinner.getSelectedItem();
-
-        // Pour l'exemple, on utilise des valeurs fictives
+        // Récupération des IDs pour catégorie et région
         reclamation.setCategorieId(binding.categorieSpinner.getSelectedItemPosition() + 1);
         reclamation.setRegionId(binding.regionSpinner.getSelectedItemPosition() + 1);
 
         // Dans une vraie application, vous récupéreriez l'ID du citoyen connecté
-        reclamation.setCitoyenId(1); // ID fictif
+        // Par exemple, depuis un stockage sécurisé ou une session
+        reclamation.setCitoyenId(1); // ID fictif pour la démonstration
 
         // Envoi de la réclamation via le ViewModel
-        ajouterRecViewModel.addReclamation(reclamation, selectedImageUri, new AjouterRecViewModel.ReclamationCallback() {
-            @Override
-            public void onSuccess() {
-                // Affichage d'un message de succès
-                Snackbar.make(binding.getRoot(),
-                        "Réclamation soumise avec succès !",
-                        Snackbar.LENGTH_LONG).show();
+        ajouterRecViewModel.addReclamation(reclamation, selectedImageUri,
+                requireActivity().getContentResolver(),
+                new AjouterRecViewModel.ReclamationCallback() {
+                    @Override
+                    public void onSuccess() {
+                        requireActivity().runOnUiThread(() -> {
+                            // Affichage d'un message de succès
+                            Snackbar.make(binding.getRoot(),
+                                    "Réclamation soumise avec succès !",
+                                    Snackbar.LENGTH_LONG).show();
 
-                // Réinitialisation du formulaire
-                binding.titreInput.setText("");
-                binding.descriptionInput.setText("");
-                binding.localisationInput.setText("");
-                binding.categorieSpinner.setSelection(0);
-                binding.regionSpinner.setSelection(0);
-                binding.photoPreview.setVisibility(View.GONE);
-                selectedImageUri = null;
-            }
+                            // Réinitialisation du formulaire
+                            resetForm();
+                        });
+                    }
 
-            @Override
-            public void onError(String message) {
-                // Affichage d'un message d'erreur
-                Snackbar.make(binding.getRoot(),
-                        "Erreur: " + message,
-                        Snackbar.LENGTH_LONG).show();
-            }
-        });
+                    @Override
+                    public void onError(String message) {
+                        requireActivity().runOnUiThread(() -> {
+                            // Affichage d'un message d'erreur
+                            Snackbar.make(binding.getRoot(),
+                                    "Erreur: " + message,
+                                    Snackbar.LENGTH_LONG).show();
+                        });
+                    }
+                });
+    }
+
+    private void resetForm() {
+        binding.titreInput.setText("");
+        binding.descriptionInput.setText("");
+        binding.localisationInput.setText("");
+        binding.categorieSpinner.setSelection(0);
+        binding.regionSpinner.setSelection(0);
+        binding.photoPreview.setVisibility(View.GONE);
+        selectedImageUri = null;
+    }
+
+    private void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(requireContext());
+            progressDialog.setMessage("Soumission en cours...");
+            progressDialog.setCancelable(false);
+        }
+        progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        hideProgressDialog();
         binding = null;
     }
 }
