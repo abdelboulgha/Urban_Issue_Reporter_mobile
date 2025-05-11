@@ -1,11 +1,11 @@
-package com.example.urban_issue_reporter_mobile.network;
+package com.example.urban_issue_reporter_mobile.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://your-api-url.com/";
+    private static final String BASE_URL = "https://urbanissuereporter-86jk0m0e.b4a.run/api/";
 
     public static ApiService getInstance() {
         if (retrofit == null) {
@@ -17,3 +17,4 @@ public class RetrofitClient {
         return retrofit.create(ApiService.class);
     }
 }
+
