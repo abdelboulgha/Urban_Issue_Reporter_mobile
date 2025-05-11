@@ -5,9 +5,13 @@ import com.example.urban_issue_reporter_mobile.model.CategorieResponse;
 import com.example.urban_issue_reporter_mobile.model.ReclamationResponse;
 import com.example.urban_issue_reporter_mobile.model.Region;
 import com.example.urban_issue_reporter_mobile.model.RegionResponse;
+import com.example.urban_issue_reporter_mobile.model.VoteRequest;
+import com.example.urban_issue_reporter_mobile.model.VoteResponse;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -20,4 +24,7 @@ public interface ApiService {
     @GET("categorie/{id}")
     Call<CategorieResponse> getCategorieById(@Path("id") int categorieId);
 
+    // Nouvelle méthode pour voter
+    @PUT("reclamation/{id}/votes")
+    Call<VoteResponse> voteReclamation(@Path("id") int reclamationId, @Body VoteRequest voteRequest);
 }

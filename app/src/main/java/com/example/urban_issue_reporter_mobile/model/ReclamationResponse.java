@@ -17,4 +17,9 @@ public class ReclamationResponse {
     public List<Reclamation> getReclamations() {
         return reclamations;
     }
+
+    @Override
+    public String toString() {
+        return "ReclamationResponse{message='" + message + "', reclamations=" + (reclamations != null ? reclamations.size() : "null") + "}";
+    }
 }

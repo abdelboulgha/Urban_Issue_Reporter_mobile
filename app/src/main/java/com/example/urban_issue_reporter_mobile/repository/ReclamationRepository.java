@@ -13,6 +13,8 @@ import com.example.urban_issue_reporter_mobile.model.Reclamation;
 import com.example.urban_issue_reporter_mobile.model.ReclamationResponse;
 import com.example.urban_issue_reporter_mobile.model.Region;
 import com.example.urban_issue_reporter_mobile.model.RegionResponse;
+import com.example.urban_issue_reporter_mobile.model.VoteRequest;
+import com.example.urban_issue_reporter_mobile.model.VoteResponse;
 
 import java.util.List;
 
@@ -87,6 +89,29 @@ public class ReclamationRepository {
         });
 
         return data;
+    }
+
+    public LiveData<Boolean> voteReclamation(int reclamationId, int nouveauNombreVotes) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        VoteRequest request = new VoteRequest(nouveauNombreVotes);
+        apiService.voteReclamation(reclamationId, request).enqueue(new Callback<VoteResponse>() {
+            @Override
+            public void onResponse(Call<VoteResponse> call, Response<VoteResponse> response) {
+                if (response.isSuccessful()) {
+                    result.setValue(true);
+                } else {
+                    result.setValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VoteResponse> call, Throwable t) {
+                result.setValue(false);
+            }
+        });
+
+        return result;
     }
 
 }

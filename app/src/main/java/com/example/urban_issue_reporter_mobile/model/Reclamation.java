@@ -1,11 +1,14 @@
 package com.example.urban_issue_reporter_mobile.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Reclamation {
     private int id;
     private String date_de_creation;
     private String titre;
     private String description;
     private String statut;
+    @SerializedName("nombre_de_votes")
     private int nombreDeVotes;
     private String localisation;
     private Integer citoyenId;
@@ -21,6 +24,9 @@ public class Reclamation {
     public String getDescription() { return description; }
     public String getStatut() { return statut; }
     public int getNombreDeVotes() { return nombreDeVotes; }
+    public void setNombreDeVotes(int nombreDeVotes) {
+        this.nombreDeVotes = nombreDeVotes;
+    }
     public String getLocalisation() { return localisation; }
     public Integer getCitoyenId() { return citoyenId; }
     public Integer getCategorieId() { return categorieId; }
