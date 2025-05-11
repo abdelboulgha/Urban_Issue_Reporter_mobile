@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.urban_issue_reporter_mobile.model.Categorie;
+import com.example.urban_issue_reporter_mobile.model.Photo;
 import com.example.urban_issue_reporter_mobile.model.Reclamation;
 import com.example.urban_issue_reporter_mobile.model.Region;
 import com.example.urban_issue_reporter_mobile.repository.ReclamationRepository;
@@ -34,5 +35,9 @@ public class ReclamationViewModel extends ViewModel {
     // Nouvelle méthode pour voter
     public LiveData<Boolean> voteReclamation(int reclamationId, int newVoteCount) {
         return repository.voteReclamation(reclamationId, newVoteCount);
+    }
+
+    public LiveData<List<Photo>> getPhotosForReclamation(int reclamationId) {
+        return repository.getPhotosForReclamation(reclamationId);
     }
 }

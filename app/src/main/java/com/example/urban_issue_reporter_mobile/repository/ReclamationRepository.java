@@ -9,6 +9,7 @@ import com.example.urban_issue_reporter_mobile.api.ApiService;
 import com.example.urban_issue_reporter_mobile.api.RetrofitClient;
 import com.example.urban_issue_reporter_mobile.model.Categorie;
 import com.example.urban_issue_reporter_mobile.model.CategorieResponse;
+import com.example.urban_issue_reporter_mobile.model.Photo;
 import com.example.urban_issue_reporter_mobile.model.Reclamation;
 import com.example.urban_issue_reporter_mobile.model.ReclamationResponse;
 import com.example.urban_issue_reporter_mobile.model.Region;
@@ -112,6 +113,31 @@ public class ReclamationRepository {
         });
 
         return result;
+    }
+
+    public LiveData<List<Photo>> getPhotosForReclamation(int reclamationId) {
+        MutableLiveData<List<Photo>> data = new MutableLiveData<>();
+
+        apiService.getPhotosForReclamation(reclamationId).enqueue(new Callback<List<Photo>>() {
+            @Override
+            public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
+                if (response.isSuccessful()) {
+                    data.setValue(response.body());
+                    Log.d("Photos", "Récupération des photos réussie pour la réclamation " + reclamationId);
+                } else {
+                    data.setValue(null);
+                    Log.e("Photos", "Échec de la récupération des photos: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Photo>> call, Throwable t) {
+                data.setValue(null);
+                Log.e("Photos", "Erreur lors de la récupération des photos: " + t.getMessage());
+            }
+        });
+
+        return data;
     }
 
 }

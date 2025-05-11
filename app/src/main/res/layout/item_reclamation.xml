@@ -25,6 +25,26 @@
         android:text="Description"
         android:textColor="@color/secondary_text" />
 
+    <!-- ViewPager2 pour les photos -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/photosViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <!-- Indicateurs pour le ViewPager (optionnel) -->
+    <LinearLayout
+        android:id="@+id/photosIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Informations détaillées -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,6 +147,7 @@
         android:layout_marginBottom="12dp"
         android:background="#E0E0E0" />
 
+    <!-- Section Votes -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -2,11 +2,14 @@ package com.example.urban_issue_reporter_mobile.api;
 
 import com.example.urban_issue_reporter_mobile.model.Categorie;
 import com.example.urban_issue_reporter_mobile.model.CategorieResponse;
+import com.example.urban_issue_reporter_mobile.model.Photo;
 import com.example.urban_issue_reporter_mobile.model.ReclamationResponse;
 import com.example.urban_issue_reporter_mobile.model.Region;
 import com.example.urban_issue_reporter_mobile.model.RegionResponse;
 import com.example.urban_issue_reporter_mobile.model.VoteRequest;
 import com.example.urban_issue_reporter_mobile.model.VoteResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -27,4 +30,6 @@ public interface ApiService {
     // Nouvelle méthode pour voter
     @PUT("reclamation/{id}/votes")
     Call<VoteResponse> voteReclamation(@Path("id") int reclamationId, @Body VoteRequest voteRequest);
+    @GET("photos/reclamation/{id}")
+    Call<List<Photo>> getPhotosForReclamation(@Path("id") int reclamationId);
 }
