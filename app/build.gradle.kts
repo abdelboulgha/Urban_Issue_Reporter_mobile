@@ -63,10 +63,11 @@ dependencies {
     implementation ("com.google.code.gson:gson:2.10.1")
 
     // OkHttp pour les logs et intercepteurs (optionnel)
-    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation ("com.github.bumptech.glide:okhttp3-integration:4.16.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
 
     // Tests
     /*testImplementation 'junit:junit:4.13.2'

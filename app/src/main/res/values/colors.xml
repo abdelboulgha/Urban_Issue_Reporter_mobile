@@ -13,4 +13,5 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="colorAccentSecondary">#9C27B0</color>
+    <color name="placeholder_color">#9C27B0</color>
 </resources>

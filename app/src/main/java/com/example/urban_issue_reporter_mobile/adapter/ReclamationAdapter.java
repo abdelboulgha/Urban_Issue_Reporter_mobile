@@ -25,7 +25,9 @@ import com.example.urban_issue_reporter_mobile.ui.reclamation.ReclamationViewMod
 import com.example.urban_issue_reporter_mobile.model.VoteManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.ReclamationViewHolder> {
 
@@ -38,6 +40,9 @@ public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.
     private List<Reclamation> reclamationList;
     private VoteClickListener voteClickListener;
 
+    // Stockage des photos par ID de réclamation
+    private Map<Integer, List<Photo>> photosByReclamationId = new HashMap<>();
+
     public ReclamationAdapter(Context context, List<Reclamation> reclamationList, VoteClickListener listener) {
         this.context = context;
         this.reclamationList = reclamationList;
@@ -49,12 +54,18 @@ public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.
         notifyDataSetChanged();
     }
 
+    // Méthode pour ajouter des photos à la map
+    public void addPhotosForReclamation(int reclamationId, List<Photo> photos) {
+        photosByReclamationId.put(reclamationId, photos);
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ReclamationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.item_reclamation, parent, false);
-        return new ReclamationViewHolder(view);
+        return new ReclamationViewHolder(view, this);
     }
 
     @Override
@@ -100,8 +111,24 @@ public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.
             }
         });
 
-        // Charger les photos
-        holder.loadPhotos(r.getId());
+        // Récupérer l'ID de la réclamation
+        int reclamationId = r.getId();
+
+        // Vérifier si nous avons déjà les photos pour cette réclamation
+        if (photosByReclamationId.containsKey(reclamationId)) {
+            List<Photo> photos = photosByReclamationId.get(reclamationId);
+            if (photos != null && !photos.isEmpty()) {
+                holder.photosAdapter.setPhotos(photos);
+                holder.photosViewPager.setVisibility(View.VISIBLE);
+                holder.updatePhotoIndicators(photos.size());
+            } else {
+                holder.photosViewPager.setVisibility(View.GONE);
+                holder.photosIndicator.setVisibility(View.GONE);
+            }
+        } else {
+            // Si nous n'avons pas encore les photos, les charger
+            holder.loadPhotos(reclamationId);
+        }
     }
 
     @Override
@@ -117,9 +144,12 @@ public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.
         PhotosAdapter photosAdapter;
         ReclamationViewModel viewModel;
         Context context;
+        ReclamationAdapter adapter;
 
-        public ReclamationViewHolder(@NonNull View itemView) {
+        public ReclamationViewHolder(@NonNull View itemView, ReclamationAdapter adapter) {
             super(itemView);
+
+            this.adapter = adapter;
 
             // Initialiser les vues de base
             titre = itemView.findViewById(R.id.tvTitre);
@@ -151,13 +181,20 @@ public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.
 
         void loadPhotos(int reclamationId) {
             try {
+                // Afficher un état de chargement
+                photosViewPager.setVisibility(View.GONE);
+                photosIndicator.setVisibility(View.GONE);
+
                 viewModel.getPhotosForReclamation(reclamationId).observe((LifecycleOwner) context, photos -> {
                     if (photos != null && !photos.isEmpty()) {
                         Log.d("Photos", "Récupération de " + photos.size() + " photos pour la réclamation " + reclamationId);
+
+                        // Stocker les photos dans l'adaptateur
+                        adapter.addPhotosForReclamation(reclamationId, photos);
+
+                        // Mettre à jour l'interface
                         photosAdapter.setPhotos(photos);
                         photosViewPager.setVisibility(View.VISIBLE);
-
-                        // Mettre à jour les indicateurs de photos
                         updatePhotoIndicators(photos.size());
                     } else {
                         Log.d("Photos", "Aucune photo pour la réclamation " + reclamationId);
@@ -172,7 +209,7 @@ public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.
             }
         }
 
-        private void updatePhotoIndicators(int size) {
+        void updatePhotoIndicators(int size) {
             photosIndicator.removeAllViews();
 
             if (size > 1) {

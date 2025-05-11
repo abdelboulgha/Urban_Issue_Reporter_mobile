@@ -1,7 +1,5 @@
 package com.example.urban_issue_reporter_mobile.model;
 
-
-
 public class Photo {
     private int id;
     private String url;

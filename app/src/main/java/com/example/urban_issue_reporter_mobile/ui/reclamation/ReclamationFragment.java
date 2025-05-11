@@ -1,6 +1,7 @@
 package com.example.urban_issue_reporter_mobile.ui.reclamation;
 
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +39,9 @@ public class ReclamationFragment extends Fragment implements ReclamationAdapter.
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Désactiver le recyclage des viewholders pour maintenir l'état des photos
+        recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
+
         // Initialiser l'adaptateur avec le listener pour les votes
         adapter = new ReclamationAdapter(getContext(), new ArrayList<>(), this);
         recyclerView.setAdapter(adapter);
@@ -50,6 +54,16 @@ public class ReclamationFragment extends Fragment implements ReclamationAdapter.
 
         viewModel.getReclamations().observe(getViewLifecycleOwner(), reclamations -> {
             if (reclamations != null) {
+                Log.d("ReclamationFragment", "Récupération de " + reclamations.size() + " réclamations");
+
+                // Précharger toutes les photos
+                for (Reclamation reclamation : reclamations) {
+                    int reclamationId = reclamation.getId();
+                    Log.d("ReclamationFragment", "Préchargement des photos pour la réclamation " + reclamationId);
+                    viewModel.getPhotosForReclamation(reclamationId);
+                }
+
+                // Charger les informations de région et de catégorie
                 for (Reclamation reclamation : reclamations) {
                     Integer regionId = reclamation.getRegionId();
                     Integer categorieId = reclamation.getCategorieId();
@@ -74,6 +88,8 @@ public class ReclamationFragment extends Fragment implements ReclamationAdapter.
                 }
 
                 adapter.setReclamations(reclamations);
+            } else {
+                Log.e("ReclamationFragment", "Liste de réclamations NULL");
             }
 
             // Masquer le chargement

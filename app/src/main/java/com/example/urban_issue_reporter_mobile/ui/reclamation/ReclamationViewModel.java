@@ -32,11 +32,12 @@ public class ReclamationViewModel extends ViewModel {
         return repository.getCategorieById(id);
     }
 
-    // Nouvelle méthode pour voter
+    // Méthode pour voter
     public LiveData<Boolean> voteReclamation(int reclamationId, int newVoteCount) {
         return repository.voteReclamation(reclamationId, newVoteCount);
     }
 
+    // Méthode pour récupérer les photos d'une réclamation
     public LiveData<List<Photo>> getPhotosForReclamation(int reclamationId) {
         return repository.getPhotosForReclamation(reclamationId);
     }

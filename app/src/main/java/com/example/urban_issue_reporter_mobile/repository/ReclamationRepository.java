@@ -17,7 +17,10 @@ import com.example.urban_issue_reporter_mobile.model.RegionResponse;
 import com.example.urban_issue_reporter_mobile.model.VoteRequest;
 import com.example.urban_issue_reporter_mobile.model.VoteResponse;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,6 +28,9 @@ import retrofit2.Response;
 
 public class ReclamationRepository {
     private ApiService apiService;
+
+    // Cache pour les photos
+    private Map<Integer, List<Photo>> photoCache = new HashMap<>();
 
     public ReclamationRepository() {
         apiService = RetrofitClient.getInstance();
@@ -70,7 +76,6 @@ public class ReclamationRepository {
 
         return data;
     }
-
 
     public LiveData<Categorie> getCategorieById(int id) {
         MutableLiveData<Categorie> data = new MutableLiveData<>();
@@ -118,26 +123,40 @@ public class ReclamationRepository {
     public LiveData<List<Photo>> getPhotosForReclamation(int reclamationId) {
         MutableLiveData<List<Photo>> data = new MutableLiveData<>();
 
+        // Vérifier si les photos sont en cache
+        if (photoCache.containsKey(reclamationId)) {
+            Log.d("Photos", "Utilisation du cache pour la réclamation " + reclamationId);
+            data.setValue(photoCache.get(reclamationId));
+            return data;
+        }
+
         apiService.getPhotosForReclamation(reclamationId).enqueue(new Callback<List<Photo>>() {
             @Override
             public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
                 if (response.isSuccessful()) {
-                    data.setValue(response.body());
-                    Log.d("Photos", "Récupération des photos réussie pour la réclamation " + reclamationId);
+                    List<Photo> photos = response.body();
+                    if (photos != null) {
+                        // Mettre en cache les photos
+                        photoCache.put(reclamationId, photos);
+                        data.setValue(photos);
+                    } else {
+                        data.setValue(new ArrayList<>());
+                    }
+                    Log.d("Photos", "Récupération des photos réussie pour la réclamation " + reclamationId +
+                            " - " + (photos != null ? photos.size() : 0) + " photos");
                 } else {
-                    data.setValue(null);
+                    data.setValue(new ArrayList<>());
                     Log.e("Photos", "Échec de la récupération des photos: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Photo>> call, Throwable t) {
-                data.setValue(null);
+                data.setValue(new ArrayList<>());
                 Log.e("Photos", "Erreur lors de la récupération des photos: " + t.getMessage());
             }
         });
 
         return data;
     }
-
 }
