@@ -11,10 +11,15 @@ import com.example.urban_issue_reporter_mobile.model.VoteResponse;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -34,4 +39,20 @@ public interface ApiService {
     // Méthode pour récupérer les photos d'une réclamation
     @GET("photos/reclamation/{id}")
     Call<List<Photo>> getPhotosForReclamation(@Path("id") int reclamationId);
+
+    Object getApiService();
+
+    @Multipart
+    @POST("reclamation/avec-image")
+    Call<ReclamationResponse> createReclamationWithImage(
+            @Part("reclamation") RequestBody reclamationData,
+            @Part MultipartBody.Part photo);
+
+    // Méthode pour récupérer toutes les catégories
+    @GET("categories")
+    Call<List<Categorie>> getAllCategories();
+
+    // Méthode pour récupérer toutes les régions
+    @GET("regions")
+    Call<List<Region>> getAllRegions();
 }

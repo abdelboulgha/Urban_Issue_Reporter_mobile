@@ -15,4 +15,14 @@ public class Region {
                 ", nom='" + nom + '\'' +
                 '}';
     }
+
+    public void setId(int i) {
+    }
+
+    public void setNom(String régionParDéfaut) {
+    }
+
+    public void setDescription(String régionTemporaire) {
+
+    }
 }

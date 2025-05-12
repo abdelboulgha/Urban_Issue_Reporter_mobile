@@ -15,4 +15,13 @@ public class Categorie {
                 ", libelle='" + libelle + '\'' +
                 '}';
     }
+
+    public void setId(int i) {
+    }
+
+    public void setLibelle(String catégorieParDéfaut) {
+    }
+
+    public void setDescription(String catégorieTemporaire) {
+    }
 }

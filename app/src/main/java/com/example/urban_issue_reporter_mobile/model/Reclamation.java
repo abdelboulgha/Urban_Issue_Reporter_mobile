@@ -57,4 +57,22 @@ public class Reclamation {
                 ", categorie=" + categorie +
                 '}';
     }
+
+    public void setTitre(String string) {
+    }
+
+    public void setDescription(String string) {
+    }
+
+    public void setLocalisation(String string) {
+    }
+
+    public void setCategorieId(int categorieId) {
+    }
+
+    public void setRegionId(int regionId) {
+    }
+
+    public void setCitoyenId(int i) {
+    }
 }

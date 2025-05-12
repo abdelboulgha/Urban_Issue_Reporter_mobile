@@ -20,10 +20,10 @@
             android:name=".SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".welcomePage"
+            android:name=".SigninActivity"
             android:exported="false" />
         <activity
-            android:name=".SigninActivity"
+            android:name=".welcomePage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
