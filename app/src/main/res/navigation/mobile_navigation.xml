@@ -39,4 +39,10 @@
         android:name="com.example.urban_issue_reporter_mobile.ui.reclamation.ReclamationFragment"
         android:label="Réclamations"
         tools:layout="@layout/fragment_reclamation" />
+
+    <fragment
+        android:id="@+id/nav_mes_reclamations"
+        android:name="com.example.urban_issue_reporter_mobile.ui.mes_reclamations.MesReclamationsFragment"
+        android:label="Mes Réclamations"
+        tools:layout="@layout/fragment_mes_reclamations" />
 </navigation>

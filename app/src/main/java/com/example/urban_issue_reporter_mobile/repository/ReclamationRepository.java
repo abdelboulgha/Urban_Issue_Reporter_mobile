@@ -159,4 +159,37 @@ public class ReclamationRepository {
 
         return data;
     }
+
+    public LiveData<List<Reclamation>> getMesReclamations(int citoyenId) {
+        MutableLiveData<List<Reclamation>> data = new MutableLiveData<>();
+
+        apiService.getReclamations().enqueue(new Callback<ReclamationResponse>() {
+            @Override
+            public void onResponse(Call<ReclamationResponse> call, Response<ReclamationResponse> response) {
+                if (response.isSuccessful()) {
+                    List<Reclamation> allReclamations = response.body().getReclamations();
+                    List<Reclamation> mesReclamations = new ArrayList<>();
+
+                    // Filtrer les réclamations par citoyenId
+                    for (Reclamation reclamation : allReclamations) {
+                        if (reclamation.getCitoyenId() != null && reclamation.getCitoyenId() == citoyenId) {
+                            mesReclamations.add(reclamation);
+                        }
+                    }
+
+                    data.setValue(mesReclamations);
+                    Log.d("Repository", "Récupération de " + mesReclamations.size() +
+                            " réclamations pour l'utilisateur " + citoyenId);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReclamationResponse> call, Throwable t) {
+                data.setValue(null);
+                Log.e("Repository", "Erreur lors de la récupération des réclamations: " + t.getMessage());
+            }
+        });
+
+        return data;
+    }
 }

@@ -32,6 +32,11 @@
             android:icon="@drawable/baseline_add_box_24"
             android:title="Ajouter réclamation" />
 
+        <item
+            android:id="@+id/nav_mes_reclamations"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Mes Réclamations" />
+
 
     </group>
 </menu>

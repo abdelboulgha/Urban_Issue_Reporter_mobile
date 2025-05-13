@@ -74,5 +74,6 @@ public class Reclamation {
     }
 
     public void setCitoyenId(int i) {
+
     }
 }
