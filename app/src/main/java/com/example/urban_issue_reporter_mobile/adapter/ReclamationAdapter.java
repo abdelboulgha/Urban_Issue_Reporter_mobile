@@ -84,10 +84,10 @@ public class ReclamationAdapter extends RecyclerView.Adapter<ReclamationAdapter.
         boolean hasVoted = VoteManager.hasVoted(context, r.getId());
         if (hasVoted) {
             holder.btnVote.setText("Annuler vote");
-            holder.btnVote.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.colorAccentSecondary));
+            holder.btnVote.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.secondary_text));
         } else {
             holder.btnVote.setText("Voter +1");
-            holder.btnVote.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.colorAccent));
+            holder.btnVote.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.teal_700));
         }
 
         // Set category and region names if available

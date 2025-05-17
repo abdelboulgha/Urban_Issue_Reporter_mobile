@@ -196,6 +196,7 @@
             android:padding="12dp"
             android:textStyle="bold"
             app:cornerRadius="8dp"
+            android:backgroundTint="@color/emerald_green"
             android:layout_marginTop="8dp"/>
 
     </LinearLayout>

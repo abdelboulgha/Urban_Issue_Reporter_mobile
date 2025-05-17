@@ -170,7 +170,7 @@
             android:layout_height="wrap_content"
             android:text="Voter +1"
             android:textSize="14sp"
-            android:backgroundTint="@color/colorAccent"
+            android:backgroundTint="@color/teal_700"
             android:drawableStart="@drawable/ic_launcher_background"
             android:drawablePadding="8dp"
             android:paddingStart="16dp"

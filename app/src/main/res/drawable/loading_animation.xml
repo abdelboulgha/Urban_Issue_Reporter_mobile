@@ -10,9 +10,9 @@
         android:thicknessRatio="8"
         android:useLevel="false">
         <gradient
-            android:centerColor="@color/colorAccent"
+            android:centerColor="@color/light_green"
             android:endColor="@android:color/white"
-            android:startColor="@color/colorAccentSecondary"
+            android:startColor="@color/emerald_green"
             android:type="sweep"
             android:useLevel="false" />
     </shape>
