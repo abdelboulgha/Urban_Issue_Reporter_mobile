@@ -58,22 +58,32 @@ public class Reclamation {
                 '}';
     }
 
-    public void setTitre(String string) {
+    // Corriger les setters vides
+    public void setTitre(String titre) {
+        this.titre = titre;
     }
 
-    public void setDescription(String string) {
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setLocalisation(String string) {
+    public void setLocalisation(String localisation) {
+        this.localisation = localisation;
     }
 
     public void setCategorieId(int categorieId) {
+        this.categorieId = categorieId;
     }
 
     public void setRegionId(int regionId) {
+        this.regionId = regionId;
     }
 
-    public void setCitoyenId(int i) {
+    public void setCitoyenId(int citoyenId) {
+        this.citoyenId = citoyenId;
+    }
 
+    public void setStatut(String statut) {
+        this.statut = statut;
     }
 }

@@ -6,14 +6,14 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://urbanissuereporter-86jk0m0e.b4a.run/api/";
-
+   private static final String BASE_URL = "https://urbanissuereporter-86jk0m0e.b4a.run/api/";
     public static ApiService getInstance() {
         if (retrofit == null) {
             // Logging très détaillé
@@ -24,6 +24,22 @@ public class RetrofitClient {
             // Client OkHttp avec timeouts augmentés et retries
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
+                    .addInterceptor(chain -> {
+                        Request request = chain.request();
+                        Log.d("RetrofitClient", "Envoi de la requête à: " + request.url().toString());
+
+                        long startTime = System.currentTimeMillis();
+                        try {
+                            Response response = chain.proceed(request);
+                            long endTime = System.currentTimeMillis();
+                            Log.d("RetrofitClient", "Réponse reçue en " + (endTime - startTime) + "ms: " +
+                                    response.code() + " pour " + request.url());
+                            return response;
+                        } catch (Exception e) {
+                            Log.e("RetrofitClient", "Erreur de requête pour " + request.url() + ": " + e.getMessage());
+                            throw e;
+                        }
+                    })
                     // Ajouter un intercepteur pour les en-têtes et les tentatives de reconnexion
                     .addInterceptor(chain -> {
                         Request original = chain.request();
@@ -40,6 +56,8 @@ public class RetrofitClient {
 
                         return chain.proceed(request);
                     })
+
+
                     .connectTimeout(120, TimeUnit.SECONDS)   // Augmenté à 2 minutes
                     .readTimeout(120, TimeUnit.SECONDS)      // Augmenté à 2 minutes
                     .writeTimeout(120, TimeUnit.SECONDS)     // Augmenté à 2 minutes

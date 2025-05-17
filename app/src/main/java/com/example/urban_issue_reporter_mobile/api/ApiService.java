@@ -45,15 +45,24 @@ public interface ApiService {
     Call<List<Photo>> getPhotosForReclamation(@Path("id") int reclamationId);
 
     // Méthode sans photo
-    @POST("reclamations")
+    @POST("reclamation")
     Call<ReclamationResponse> createReclamation(@Body RequestBody reclamationData);
 
-    // Méthode avec photo - MODIFIÉE pour utiliser PartMap au lieu de Part pour les données
-    @Multipart
-    @POST("reclamation/avec-image")
-    Call<ReclamationResponse> createReclamationWithImage(
-            @PartMap Map<String, RequestBody> reclamationData,
-            @Part MultipartBody.Part photo);
+    // Méthode avec photo - commentée et remplacée par la méthode ci-dessous
+     @Multipart
+     @POST("reclamation/avec-image")
+     Call<ReclamationResponse> createReclamationWithImage(
+             @PartMap Map<String, RequestBody> reclamationData,
+             @Part MultipartBody.Part photo);
+
+    // Méthode avec photo - Utilise la même route que la méthode sans photo
+    // Remarque: Cette méthode ne sera pas utilisée pour l'instant, car nous avons désactivé
+    // temporairement l'upload de photos dans AjouterRecViewModel.java
+   // @Multipart
+   // @POST("reclamation")
+    //Call<ReclamationResponse> createReclamationWithImage(
+      //      @PartMap Map<String, RequestBody> reclamationData,
+        //    @Part MultipartBody.Part photo);
 
     // Méthodes pour les catégories et régions
     @GET("categories")
